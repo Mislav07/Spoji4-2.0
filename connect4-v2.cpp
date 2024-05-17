@@ -105,7 +105,6 @@ int provjera()
     }
     return 0;
 }
-// napraviti sort za leaderboard
 int main()
 {
     int izbor;
