@@ -140,7 +140,7 @@ int main()
                 if (unesi_potez(red, igrac))
                 {
                     // system clr
-                    system("clear");
+                    system("cls");
                     printanje_ploce();
                     int pobjednik = provjera();
                     if (pobjednik != 0)
