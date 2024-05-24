@@ -120,7 +120,7 @@ int main()
         cout << endl;
         cout << "1. Zapocni igru: igrac protiv igraca! " << endl;
         cout << endl;
-        cout << "2. Zapocni igru: igrac protiv racunala! " << endl;
+        cout << "2. Ispis tablice poretka! " << endl;
         cout << endl;
         cout << "3. Izlaz iz igre! " << endl;
         cout << endl;
@@ -164,7 +164,7 @@ int main()
         }
         else if (izbor == 2)
         {
-            cout << "Trenutno nije moguce igrati protiv racunala!" << endl;
+            //leaderboard
         }
         else if (izbor == 3)
         {
