@@ -12,38 +12,49 @@ int ploca[RED][STUPAC];
 int igrac = 0;
 int zavrsetak_igre = 0;
 
-void printanje_ploce()
+void printanje_ploce2(int ploca[][RED]) // https://stackoverflow.com/questions/22290174/connect-four-game-board-in-c
 {
-    // https://stackoverflow.com/questions/22290174/connect-four-game-board-in-c
-    cout << endl;
     for (int i = 0; i < RED; i++)
     {
-        cout << "| ";
+        cout << "+";
         for (int j = 0; j < STUPAC; j++)
         {
-            if (ploca[i][j] == 0)
-                cout << " ";
-            else if (ploca[i][j] == 1)
-                cout << "X ";
-            else if (ploca[i][j] == 2)
-                cout << "O ";
+            cout << "---+";
         }
-        cout << "| " << endl;
+        cout << endl;
+        cout << "|";
+        for (int j = 0; j < STUPAC; j++)
+        {
+            cout << "   |";
+        }
+        cout << endl;
     }
-    cout << "----------------------" << endl;
-    cout << " 1 2 3 4 5 6 7 " << endl;
-}
-
-bool provjera_poteza(int odabir)
-{
-    if (odabir < 0 || odabir >= STUPAC)
+    cout << "+";
+    for (int j = 0; j < STUPAC; j++)
     {
-        cout << "Netocan unos! Molimo odaberite validno polje! " << endl;
-        return false;
+        cout << "---+";
     }
-    return true;
+    cout << endl;
 }
 
+int unesi_potez(int stupac, int vrijednost)
+{
+    if(stupac < 0 ||stupac > STUPAC)
+    {
+        cout << "Netocan stupac, unesite stupac izmedu 1-7";
+        return 0;
+    }
+    for (int i = RED - 1; i >= 0; i--)
+    {
+        if(ploca[i][stupac-1]==0)
+        {
+            ploca[i][stupac - 1] = vrijednost;
+            return 1;
+        }
+    }
+    cout << "Red je popunjen, odaberite neki drugi! " << endl;
+    return 0;
+}
 bool provjera()
 {
     // horizontalno
@@ -95,6 +106,7 @@ bool provjera()
 
 int main()
 {
+    int ploca[STUPAC][RED] = {{0}};
     int izbor; // https://www.asciiart.eu/text-to-ascii-art
     cout << "███████╗██████╗  ██████╗      ██╗██╗    ██╗  ██╗    ██████╗     ██████╗ " << endl;
     cout << "██╔════╝██╔══██╗██╔═══██╗     ██║██║    ██║  ██║    ╚════██╗   ██╔═████╗" << endl;
@@ -120,18 +132,34 @@ int main()
                     ploca[i][j] = 0;
                 }
             }
-            printanje_ploce();
+            printanje_ploce2(ploca);
             igrac = 1;
             zavrsetak_igre = 0;
             while (!zavrsetak_igre)
             {
-                int red;
-                cout << "Igrac" << igrac << "unesite red 1-7 " << endl;
-                cin >> red;
-
-                if (provjera_poteza(red, igrac))
+                int stupac;
+                cout << "Igrac " << igrac << " unesite red 1-7 " << endl;
+                cin >> stupac;
+                if(unesi_potez(stupac, igrac))
                 {
+                    system("cls");
+                    printanje_ploce2;
+                    int pobjednik = provjera();
+                    if(pobjednik != false)
+                    {
+                        cout << "Pobjednik je igrac " << igrac << endl, (pobjednik == true) ? '1' : '2';
+                        zavrsetak_igre = true;
+                    }
+                    else if(igrac == 1)
+                    {
+                        igrac = 2;
+                    }
+                    else
+                    {
+                        igrac = 1;
+                    }
                 }
+                
             }
         }
     }
