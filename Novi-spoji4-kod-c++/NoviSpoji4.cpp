@@ -7,7 +7,7 @@ using namespace std;
 const int RED = 6;
 const int STUPAC = 7;
 
-void printanje_ploce(const vector<vector<char>> &ploca)
+void printanje_ploce(const vector<vector<char>> &ploca) // https://stackoverflow.com/questions/22290174/connect-four-game-board-in-c
 {
     for (int i = 0; i < RED; i++)
     {
@@ -20,14 +20,16 @@ void printanje_ploce(const vector<vector<char>> &ploca)
         cout << "|";
         for (int j = 0; j < STUPAC; j++)
         {
-            cout << " " << ploca[i][j] << " |" << endl;
+            cout << "   |";
         }
+        cout << endl;
+    }
         cout << "+";
         for (int j = 0; j < STUPAC; j++)
         {
             cout << "---+";
         }
-    }
+        cout << endl;
 }
 
 bool provjera(const vector<vector<char>> &ploca, char zeton)
@@ -114,7 +116,74 @@ int main()
 
         if (izbor == 1)
         {
+            vector<vector<char>> ploca(RED, vector<char>(STUPAC, ' '));
+            string igrac1, igrac2;
+
+            cout << "Unesite ime prvog igraca: ";
+            getline(cin, igrac1);
+
+            cout << "Unesite ime drugog igraca: ";
+            getline(cin, igrac2);
+
+            char trenutniIgrac = 'X';
+            bool igraTraje = true;
+
+            while (igraTraje)
+            {
+                printanje_ploce(ploca);
+                int odabraniStupac;
+                cout << "Na potezu je igrac " << (trenutniIgrac == 'X' ? igrac1 : igrac2) << ", unesite broj stupca od 0-6! "; //
+                cin >> odabraniStupac;
+
+                if (odabraniStupac < 0 || odabraniStupac >= STUPAC)
+                {
+                    cout << "Neispravan unos! Pokusajte ponovno. Molim unesite stupac od 0 - 6! " << endl;
+                }
+
+                bool dobarPotez = false;
+                for (int i = RED - 1; i >= 0; i--)
+                {
+                    if(ploca[i][odabraniStupac] == ' ')
+                    {
+                        ploca[i][odabraniStupac] = trenutniIgrac;
+                        dobarPotez = true;
+                        break;
+                    }
+                }
+                if(!dobarPotez)
+                {
+                    cout << "Stupac je pun! Molim unesite drugi stupac.";
+
+                }
+                if(provjera(ploca, trenutniIgrac))
+                {
+                    printanje_ploce(ploca);
+                    cout << "Pobjednik je " << (trenutniIgrac == 'X' ? igrac1 : igrac2) << "!" << endl;
+                    igraTraje = false;
+                }
+                else if(punaPloca(ploca))
+                {
+                    printanje_ploce(ploca);
+                    cout << "Ploca je puna, nema vise slobodnih mjesta. Nerijeseno! " << endl;
+                    igraTraje = false;
+                }
+                trenutniIgrac = (trenutniIgrac == 'X' ? 'O' : 'X');
+            }
         }
+        else if(izbor == 2)
+        {
+            cout << "Odabrali ste leaderboard. Trenutno nije dostupno!";
+        }
+        else if(izbor == 3)
+        {
+            cout << "Izlazak iz igre!" << endl;
+            break;
+        }
+        else
+        {
+            cout << "Unijeli ste izbor koji nije ponuden! Molim odaberite od 1-3. ";
+        }
+        
     }
-}
+    return 0;
 }
