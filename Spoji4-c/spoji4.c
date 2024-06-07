@@ -1,4 +1,12 @@
 #include <stdio.h>
+#include <windows.h>
+#include <stdlib.h>
+
+#if defined(_WIN32)
+#define CLEAR system("cls");
+#elif defined(__linux__)
+#define CLEAR system("clear");
+#endif
 
 #define STUPAC 6
 #define RED 7
@@ -140,7 +148,7 @@ int main()
                 if (unesi_potez(red, igrac))
                 {
                     // system clr
-                    system("cls");
+                    CLEAR;
                     printanje_ploce();
                     int pobjednik = provjera();
                     if (pobjednik != 0)
