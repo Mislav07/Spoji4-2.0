@@ -119,9 +119,9 @@ int odabirStupca(int ploca[RED][STUPAC])
     int stupac;
     while (true)
     {
-        cout << "Odaberite stupac od 0-6 gdje zelite ubaciti zeton!" << endl;
+        cout << "Odaberite stupac od 1-7 gdje zelite ubaciti zeton!" << endl;
         cin >> stupac;
-
+        stupac -= 1;
         if (stupac >= 0 && stupac < STUPAC && ploca[0][stupac] == 0)
         {
             return stupac;
@@ -207,6 +207,7 @@ void igra()
 
 int main()
 {
+    ocistiTerminal();
     int izbor;
     cout << "███████╗██████╗  ██████╗      ██╗██╗    ██╗  ██╗    ██████╗     ██████╗ " << endl;
     cout << "██╔════╝██╔══██╗██╔═══██╗     ██║██║    ██║  ██║    ╚════██╗   ██╔═████╗" << endl;
