@@ -1,20 +1,19 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <windows.h>
 #include <cstdlib>
 
 using namespace std;
 
-#if defined(_WIN32)
-#define CLEAR system("cls");
-#elif defined(__linux__)
-#define CLEAR system("clear");
-#endif
-
 const int RED = 6;
 const int STUPAC = 7;
 int ploca[RED][STUPAC];
+
+void ocistiTerminal()
+{
+    cout << "\033[2J\033[1;1H";
+}
+
 
 void printanje_ploce() // https://stackoverflow.com/questions/22290174/connect-four-game-board-in-c
 {
@@ -29,7 +28,12 @@ void printanje_ploce() // https://stackoverflow.com/questions/22290174/connect-f
         cout << "|";
         for (int j = 0; j < STUPAC; j++)
         {
-            cout << "   |";
+            if(ploca[i][j] == 0)
+                cout << "   |";
+            else if (ploca [i][j] == 1)
+                cout << " X |";
+            else
+                cout << " 0 |";
         }
         cout << endl;
     }
@@ -45,7 +49,7 @@ bool provjera_PunaPloca(int ploca[RED][STUPAC])
 {
     for (int j = 0; j < STUPAC; j++)
     {
-        if (ploca[0][j] == ' ')
+        if (ploca[0][j] == 0)
         {
             return false; // ako ima prostora ploca nije puna
         }
@@ -89,11 +93,11 @@ bool provjera_Pobjednik(int ploca[RED][STUPAC], char zeton)
         }
     }
     // dijagonalno od lijevo gore prema desno dole
-    for (int i = 0; i < RED - 3; i++)
+    for (int i = 0; i < RED; i++)
     {
-        for (int j = 0; j < STUPAC; j++)
+        for (int j = 0; j < STUPAC - 3; j++)
         {
-            if (ploca[i][j] == zeton && ploca[i + 1][j - 1] == zeton && ploca[i + 2][j - 2] == zeton && ploca[i + 3][j - 3] == zeton)
+            if (ploca[i][j] == zeton && ploca[i - 1][j + 1] == zeton && ploca[i - 2][j + 2] == zeton && ploca[i - 3][j + 3] == zeton)
             {
                 return true;
             }
@@ -119,11 +123,11 @@ int odabirStupca(int ploca[RED][STUPAC])
         cout << "Odaberite stupac od 0-6 gdje zelite ubaciti zeton!" << endl;
         cin >> stupac;
 
-        if (stupac >= 0 && stupac < STUPAC && ploca[0][stupac] == ' ')
+        if (stupac >= 0 && stupac < STUPAC && ploca[0][stupac] == 0)
         {
             return stupac;
         }
-        cout << "Odabrali ste stupac koji se ne nalazi na ploci ili je stupac pun. Molim pokusajte ponovno!";
+        cout << "Odabrali ste stupac koji se ne nalazi na ploci ili je stupac pun. Molim pokusajte ponovno!" << endl;
     }
 }
 
@@ -131,14 +135,14 @@ bool ubaciZeton(int ploca[RED][STUPAC], char zeton, int stupac)
 {
     for (int i = RED - 1; i >= 0; i--) // krece od najnizeg reda , zeton pada pa trebamo prvo slobodno mjesto
     {
-        if (ploca[i][stupac] == ' ') // je li stupac prazan?
+        if (ploca[i][stupac] == 0) // je li stupac prazan?
         {
             ploca[i][stupac] = zeton; // ako je prazan se ubacuje zeton
             return true;
         }
     }
     return false; // ako je stupac pun vraca false
-}
+} 
 
 int main()
 {
@@ -167,39 +171,49 @@ int main()
             {
                 for (int j = 0; j < STUPAC; j++)
                 {
-                    ploca[i][j] = ' ';
+                    ploca[i][j] = 0;
                 }
             }
             int trenutniIgrac = 1;
             char zeton;
-            bool gotovaIgra = false;
 
             while (true)
             {
-                // CLEAR;
+                //clearScreen();
+                ocistiTerminal();
                 printanje_ploce();
 
-                zeton = (trenutniIgrac == 1) ? 'X' : 'O';
-                cout << (trenutniIgrac == 1 ? igrac1 : igrac2) << " je na potezu. Njegov zeton je:  " << zeton << endl;
+                zeton = (trenutniIgrac == 1) ? 1 : 2;
+                cout << (trenutniIgrac == 1 ? igrac1 : igrac2) << " je na potezu. Njegov zeton je: " << (zeton == 1 ? 'X' : 'O') << endl;
 
                 int stupac = odabirStupca(ploca);
                 ubaciZeton(ploca, zeton, stupac);
 
                 if (provjera_Pobjednik(ploca, zeton))
                 {
-                    // CLEAR;
+                    //clearScreen();
+                    ocistiTerminal();
                     printanje_ploce();
                     cout << (trenutniIgrac == 1 ? igrac1 : igrac2) << " je pobjedio!" << endl;
                     break;
                 }
                 if (provjera_PunaPloca(ploca))
                 {
-                    // CLEAR;
+                    //clearScreen();
+                    ocistiTerminal();
                     printanje_ploce();
                     cout << "Ploca je popunjena! Nerjeseno!! " << endl;
                     break;
                 }
-                trenutniIgrac = (trenutniIgrac = 1) ? 2 : 1;
+                trenutniIgrac = (trenutniIgrac == 1) ? 2 : 1;
+            }
+
+            string odgovor;
+            cout << "Zelite li igrati ponovo? (da/ne): ";
+            cin >> odgovor;
+            if(odgovor != "da" && odgovor != "Da" && odgovor != "DA")
+            {
+                break;
             }
         }
 
@@ -211,9 +225,9 @@ int main()
         {
             break;
         }
-        else
+        else 
         {
-            cout << "Odabrali se izbor koji ne postoji! Molim unesite validan izbor! ";
+            cout << "Odabrali ste izbor koji ne postoji! Molim unesite validan izbor! " << endl;
         }
     }
     return 0;
