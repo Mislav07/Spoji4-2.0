@@ -16,18 +16,57 @@ void ocistiTerminal()
     cout << "\033[2J\033[1;1H";
 }
 
+bool imePostoji(const vector<string> &imena, const string &ime)
+{
+    return find(imena.begin(), imena.end(), ime) != imena.end();
+}
+
 void upisImena(string &igrac1, string &igrac2)
 {
-    cout << "Unesite ime 1. igraca: ";
-    getline(cin, igrac1);
-
-    cout << "Unesite ime 2. igraca: ";
-    getline(cin, igrac2);
-
     fstream datoteka;
-    datoteka.open("igraci.txt");
+    datoteka.open("igraci.txt", ios::in);
+    vector<string> imena;
+    string ime;
 
-    if (datoteka.is_open()) // za provjeru ako se datoteka ne moze otvoriti ili ne postoji izbacit ce poruku upozorenja
+    if (datoteka.is_open())
+    {
+        while (getline(datoteka, ime))
+        {
+            imena.push_back(ime);
+        }
+        datoteka.close();
+    }
+    else
+    {
+        cout << "Datoteka se ne moze otvoriti! " << endl;
+    }
+
+    // provjera imena prvog igraca
+    while (true)
+    {
+        cout << "Unesite ime 1. igraca: " << endl;
+        getline(cin, igrac1);
+        if (!imePostoji(imena, igrac1))
+        {
+            break;
+        }
+        cout << "Ovo ime vec postoji. Molim unesite drugo ili ga malo promijenite! " << endl;
+    }
+
+    // drugi igrac
+    while (true)
+    {
+        cout << "Unesite ime 2. igraca: " << endl;
+        getline(cin, igrac2);
+        if (!imePostoji(imena, igrac2))
+        {
+            break;
+        }
+        cout << "Ovo ime vec postoji. Molim unesite drugo ili ga malo promijenite! " << endl;
+    }
+
+    datoteka.open("igraci.txt", ios::app);
+    if (datoteka.is_open())
     {
         datoteka << igrac1 << endl;
         datoteka << igrac2 << endl;
@@ -35,7 +74,7 @@ void upisImena(string &igrac1, string &igrac2)
     }
     else
     {
-        cout << "Datoteka se ne moze otvoriti!";
+        cout << "Datoteka se ne moze otvoriti! " << endl;
     }
 }
 
@@ -46,7 +85,7 @@ void ispisIgraca()
 
     if (datoteka.is_open())
     {
-        cout << "Imena igraca koji su igrali Spoji4 2.0: ";
+        cout << "Imena igraca koji su igrali Spoji4 2.0: " << endl;
         while ((getline(datoteka, ime)))
         {
             cout << ime << endl;
@@ -268,8 +307,8 @@ int main()
 
         else if (izbor == 2)
         {
+            ocistiTerminal();
             ispisIgraca();
-            cout << endl;
         }
         else if (izbor == 3)
         {
