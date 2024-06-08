@@ -27,7 +27,7 @@ void upisImena(string &igrac1, string &igrac2)
     fstream datoteka;
     datoteka.open("igraci.txt", ios::out | ios::app);
 
-    if(datoteka.is_open())
+    if(datoteka.is_open()) //za provjeru ako se datoteka ne moze otvoriti ili ne postoji izbacit ce poruku upozorenja
     {
         datoteka << igrac1 << endl;
         datoteka << igrac2 << endl;
