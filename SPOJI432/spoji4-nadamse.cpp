@@ -2,6 +2,8 @@
 #include <string>
 #include <fstream>
 #include <cstdlib>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -13,6 +15,30 @@ void ocistiTerminal()
 {
     cout << "\033[2J\033[1;1H";
 }
+
+void upisImena(string &igrac1, string &igrac2)
+{
+    cout << "Unesite ime 1. igraca: ";
+    getline(cin, igrac1);
+
+    cout << "Unesite ime 2. igraca: ";
+    getline(cin, igrac2);
+
+    fstream datoteka;
+    datoteka.open("igraci.txt", ios::out | ios::app);
+
+    if(datoteka.is_open())
+    {
+        datoteka << igrac1 << endl;
+        datoteka << igrac2 << endl;
+        datoteka.close();
+    }
+    else
+    {
+        cout << "Datoteka se ne moze otvoriti!";
+    }
+}   
+
 
 void printanje_ploce() // https://stackoverflow.com/questions/22290174/connect-four-game-board-in-c
 {
@@ -105,14 +131,6 @@ bool provjera_Pobjednik(int ploca[RED][STUPAC], char zeton)
     return false;
 }
 
-void upisImena(string &igrac1, string &igrac2)
-{
-    cout << "Unesite ime 1. igraca: ";
-    getline(cin, igrac1);
-
-    cout << "Unesite ime 2. igraca: ";
-    getline(cin, igrac2);
-}
 
 int odabirStupca(int ploca[RED][STUPAC])
 {
@@ -232,7 +250,7 @@ int main()
 
         else if (izbor == 2)
         {
-            cout << "Leaderboard jos nije gotov!"; // uzima imena i bodove iz tekstualne datoteke/binarne
+            cout << "Leaderboard jos nije gotov!"; 
         }
         else if (izbor == 3)
         {
