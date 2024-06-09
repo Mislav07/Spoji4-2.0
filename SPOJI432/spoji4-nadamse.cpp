@@ -7,7 +7,7 @@
 
 using namespace std;
 
-const int RED = 6;
+const int RED = 6; 
 const int STUPAC = 7;
 int ploca[RED][STUPAC];
 
