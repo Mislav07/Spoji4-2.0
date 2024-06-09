@@ -7,7 +7,7 @@
 
 using namespace std;
 
-const int RED = 6; 
+const int RED = 6;
 const int STUPAC = 7;
 int ploca[RED][STUPAC];
 
@@ -19,6 +19,36 @@ void ocistiTerminal()
 bool imePostoji(const vector<string> &imena, const string &ime) // chatgpt
 {
     return find(imena.begin(), imena.end(), ime) != imena.end();
+}
+
+void BrojPokretaBrojac(int brojPokretanja)
+{
+    ofstream datoteka("broj_pokretanja.bin", ios::binary);
+    if (datoteka.is_open())
+    {
+        datoteka.write(reinterpret_cast<char *>(&brojPokretanja), sizeof(brojPokretanja));
+        datoteka.close();
+    }
+    else
+    {
+        cout << "Nije moguce otvoriti datoteku za pisanje!" << endl;
+    }
+}
+
+int procitajBrojPokretanja()
+{
+    ifstream datoteka("broj_pokretanja.bin", ios::binary);
+    int brojPokretanja = 0;
+    if (datoteka.is_open())
+    {
+        datoteka.read(reinterpret_cast<char *>(&brojPokretanja), sizeof(brojPokretanja));
+        datoteka.close();
+    }
+    else
+    {
+        cout << "Nije moguce otvoriti datoteku za citanje!" << endl;
+    }
+    return brojPokretanja;
 }
 
 void upisImena(string &igrac1, string &igrac2)
@@ -261,6 +291,10 @@ bool ubaciZeton(int ploca[RED][STUPAC], char zeton, int stupac)
 
 void igra()
 {
+    int brojPokretanja = procitajBrojPokretanja();
+    brojPokretanja++;
+    BrojPokretaBrojac(brojPokretanja);
+
     string igrac1, igrac2;
     upisImena(igrac1, igrac2);
 
@@ -337,7 +371,8 @@ int main()
     {
         cout << "1. Zapocnite igru: igrac protiv igraca! " << endl;
         cout << "2. Ispis pobjeda po igracima. " << endl;
-        cout << "3. Izadite iz igrice! " << endl;
+        cout << "3. Ispis broja pokretanja igre. " << endl;
+        cout << "4. Izadite iz igrice! " << endl;
         cin >> izbor;
         cin.ignore();
 
@@ -353,6 +388,12 @@ int main()
             ispisIgraca();
         }
         else if (izbor == 3)
+        {
+            ocistiTerminal();
+            int brojPokretanja = procitajBrojPokretanja();
+            cout << "Igra je pokrenuta ukupno " << brojPokretanja << " puta." << endl;
+        }
+        else if (izbor == 4)
         {
             cout << "Odabrali ste izlazak iz igrice! Doviđenja! " << endl;
             break;
