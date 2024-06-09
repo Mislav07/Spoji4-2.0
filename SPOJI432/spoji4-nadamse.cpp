@@ -16,7 +16,7 @@ void ocistiTerminal()
     cout << "\033[2J\033[1;1H";
 }
 
-bool imePostoji(const vector<string> &imena, const string &ime)
+bool imePostoji(const vector<string> &imena, const string &ime) // chatgpt
 {
     return find(imena.begin(), imena.end(), ime) != imena.end();
 }
@@ -27,10 +27,11 @@ void upisImena(string &igrac1, string &igrac2)
     datoteka.open("igraci.txt", ios::in);
     vector<string> imena;
     string ime;
+    int bodovi;
 
     if (datoteka.is_open())
     {
-        while (getline(datoteka, ime))
+        while (datoteka >> ime >> bodovi)
         {
             imena.push_back(ime);
         }
@@ -68,8 +69,8 @@ void upisImena(string &igrac1, string &igrac2)
     datoteka.open("igraci.txt", ios::app);
     if (datoteka.is_open())
     {
-        datoteka << igrac1 << endl;
-        datoteka << igrac2 << endl;
+        datoteka << igrac1 << " 0" << endl;
+        datoteka << igrac2 << " 0" << endl;
         datoteka.close();
     }
     else
@@ -82,19 +83,59 @@ void ispisIgraca()
 {
     fstream datoteka("igraci.txt");
     string ime;
+    int bodovi;
 
     if (datoteka.is_open())
     {
         cout << "Imena igraca koji su igrali Spoji4 2.0: " << endl;
-        while ((getline(datoteka, ime)))
+        while (datoteka >> ime >> bodovi)
         {
-            cout << ime << endl;
+            cout << "Ime igraca: " << ime << " bodovi igraca: " << bodovi << endl;
         }
         datoteka.close();
     }
     else
     {
         cout << "Datoteka se ne moze otvoriti! ";
+    }
+}
+
+void updateScore(const string &ime) // chatgpt
+{
+    fstream datoteka("igraci.txt");
+    vector<pair<string, int>> igraci;
+    string imeTemp;
+    int bodovi;
+
+    if (datoteka.is_open())
+    {
+        while (datoteka >> imeTemp >> bodovi)
+        {
+            if (imeTemp == ime)
+            {
+                bodovi++;
+            }
+            igraci.push_back(make_pair(imeTemp, bodovi));
+        }
+        datoteka.close();
+    }
+    else
+    {
+        cout << "Datoteka se ne moze otvoriti! " << endl;
+    }
+
+    datoteka.open("igraci.txt", ios::out | ios::trunc);
+    if (datoteka.is_open())
+    {
+        for (const auto &igrac : igraci)
+        {
+            datoteka << igrac.first << " " << igrac.second << endl;
+        }
+        datoteka.close();
+    }
+    else
+    {
+        cout << "Datoteka se ne moze otvoriti! " << endl;
     }
 }
 
@@ -220,9 +261,9 @@ bool ubaciZeton(int ploca[RED][STUPAC], char zeton, int stupac)
 
 void igra()
 {
-    string igrac1,
-        igrac2;
+    string igrac1, igrac2;
     upisImena(igrac1, igrac2);
+
     while (true)
     {
         for (int i = 0; i < RED; i++)
@@ -253,7 +294,8 @@ void igra()
                 // clearScreen();
                 ocistiTerminal();
                 printanje_ploce();
-                cout << (trenutniIgrac == 1 ? igrac1 : igrac2) << " je pobjedio!" << endl;
+                cout << (trenutniIgrac == 1 ? igrac1 : igrac2) << " je pobjedio! Osvojili ste 1 bod!" << endl;
+                updateScore(trenutniIgrac == 1 ? igrac1 : igrac2);
                 break;
             }
             if (provjera_PunaPloca(ploca))
