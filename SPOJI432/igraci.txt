@@ -8,3 +8,7 @@ Z 1
 a 0
 l 1
 d 0
+mario 0
+mislav 1
+m1aso 1
+mso 0

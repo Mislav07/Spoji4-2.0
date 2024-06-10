@@ -236,7 +236,7 @@ bool provjera_Pobjednik(int ploca[RED][STUPAC], char zeton)
         }
     }
     // dijagonalno od lijevo dole prema desno gore
-    for (int i = 0; i < RED - 3; i++)
+    for (int i = 3; i < RED; i++)
     {
         for (int j = 0; j < STUPAC - 3; j++)
         {
@@ -247,7 +247,7 @@ bool provjera_Pobjednik(int ploca[RED][STUPAC], char zeton)
         }
     }
     // dijagonalno od lijevo gore prema desno dole
-    for (int i = 0; i < RED; i++)
+    for (int i = 0; i < RED - 3; i++)
     {
         for (int j = 0; j < STUPAC - 3; j++)
         {
