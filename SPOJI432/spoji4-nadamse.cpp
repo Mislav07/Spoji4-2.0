@@ -12,7 +12,7 @@ const int RED = 6;
 const int STUPAC = 7;
 int ploca[RED][STUPAC];
 
-void ocistiTerminal()
+void ocistiTerminal() //link stackoverflow
 {
     cout << "\033[2J\033[1;1H";
 }
