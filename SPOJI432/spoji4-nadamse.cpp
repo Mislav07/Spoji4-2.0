@@ -236,24 +236,24 @@ bool provjera_Pobjednik(int ploca[RED][STUPAC], char zeton)
         }
     }
     // dijagonalno od lijevo dole prema desno gore
-    for (int i = 3; i < RED; i++)
-    {
-        for (int j = 0; j < STUPAC - 3; j++)
-        {
-            if (ploca[i][j] == zeton && ploca[i - 1][j + 1] == zeton && ploca[i - 2][j + 2] == zeton && ploca[i - 3][j + 3] == zeton)
-            {
-                return true;
-            }
-        }
-    }
-    // dijagonalno od lijevo gore prema desno dole
     for (int i = 0; i < RED - 3; i++)
     {
         for (int j = 0; j < STUPAC - 3; j++)
         {
             if (ploca[i][j] == zeton && ploca[i + 1][j + 1] == zeton && ploca[i + 2][j + 2] == zeton && ploca[i + 3][j + 3] == zeton)
             {
-                return true;    
+                return true;
+            }
+        }
+    }
+    // dijagonalno od lijevo gore prema desno dole
+    for (int i = 0; i < RED; i++)
+    {
+        for (int j = 0; j < STUPAC - 3; j++)
+        {
+            if (ploca[i][j] == zeton && ploca[i - 1][j + 1] == zeton && ploca[i - 2][j + 2] == zeton && ploca[i - 3][j + 3] == zeton)
+            {
+                return true;
             }
         }
     }
@@ -289,17 +289,6 @@ bool ubaciZeton(int ploca[RED][STUPAC], char zeton, int stupac)
     return false; // ako je stupac pun vraca false
 }
 
-void resetirajPlocu()
-{
-    for (int i = 0; i < RED; i++)
-    {
-        for (int j = 0; j < STUPAC; j++)
-        {
-            ploca[i][j] = 0;
-        }
-    }
-}
-
 void igra()
 {
     int brojPokretanja = procitajBrojPokretanja();
@@ -311,7 +300,14 @@ void igra()
 
     while (true)
     {
-        resetirajPlocu();
+        for (int i = 0; i < RED; i++)
+        {
+            for (int j = 0; j < STUPAC; j++)
+            {
+                ploca[i][j] = 0;
+            }
+        }
+
         int trenutniIgrac = 1;
         char zeton;
 
