@@ -7,6 +7,7 @@
 
 using namespace std;
 
+
 const int RED = 6;
 const int STUPAC = 7;
 int ploca[RED][STUPAC];
@@ -23,7 +24,7 @@ bool imePostoji(const vector<string> &imena, const string &ime) // chatgpt
 
 void BrojPokretaBrojac(int brojPokretanja)
 {
-    ofstream datoteka("broj_pokretanja.bin", ios::binary);
+    ofstream datoteka("C:\\Users\\Gb-gama\\Documents\\GitHub\\Spoji4-2.0\\SPOJI432\\broj_pokretanja.bin", ios::binary);
     if (datoteka.is_open())
     {
         datoteka.write(reinterpret_cast<char *>(&brojPokretanja), sizeof(brojPokretanja));
@@ -37,7 +38,7 @@ void BrojPokretaBrojac(int brojPokretanja)
 
 int procitajBrojPokretanja()
 {
-    ifstream datoteka("broj_pokretanja.bin", ios::binary);
+    ifstream datoteka("C:\\Users\\Gb-gama\\Documents\\GitHub\\Spoji4-2.0\\SPOJI432\\broj_pokretanja.bin", ios::binary);
     int brojPokretanja = 0;
     if (datoteka.is_open())
     {
@@ -54,7 +55,7 @@ int procitajBrojPokretanja()
 void upisImena(string &igrac1, string &igrac2)
 {
     fstream datoteka;
-    datoteka.open("igraci.txt", ios::in);
+    datoteka.open("C:\\Users\\Gb-gama\\Documents\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt", ios::in);
     vector<string> imena;
     string ime;
     int bodovi;
@@ -96,7 +97,7 @@ void upisImena(string &igrac1, string &igrac2)
         cout << "Ovo ime vec postoji. Molim unesite drugo ili ga malo promijenite! " << endl;
     }
 
-    datoteka.open("igraci.txt", ios::app);
+    datoteka.open("C:\\Users\\Gb-gama\\Documents\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt", ios::app);
     if (datoteka.is_open())
     {
         datoteka << igrac1 << " 0" << endl;
@@ -111,7 +112,7 @@ void upisImena(string &igrac1, string &igrac2)
 
 void ispisIgraca()
 {
-    fstream datoteka("igraci.txt");
+    fstream datoteka("C:\\Users\\Gb-gama\\Documents\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt");
     string ime;
     int bodovi;
 
@@ -132,7 +133,7 @@ void ispisIgraca()
 
 void updateScore(const string &ime) // chatgpt
 {
-    fstream datoteka("igraci.txt");
+    fstream datoteka("C:\\Users\\Gb-gama\\Documents\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt");
     vector<pair<string, int>> igraci;
     string imeTemp;
     int bodovi;
@@ -154,7 +155,7 @@ void updateScore(const string &ime) // chatgpt
         cout << "Datoteka se ne moze otvoriti! " << endl;
     }
 
-    datoteka.open("igraci.txt", ios::out | ios::trunc);
+    datoteka.open("C:\\Users\\Gb-gama\\Documents\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt", ios::out | ios::trunc);
     if (datoteka.is_open())
     {
         for (const auto &igrac : igraci)
