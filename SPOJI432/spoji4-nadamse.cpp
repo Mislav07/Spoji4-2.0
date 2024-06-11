@@ -116,7 +116,7 @@ void updateScore(const string &ime) // chatgpt
 
     if (datoteka.is_open())
     {
-        while (datoteka >> imeTemp >> bodovi)
+        while (datoteka >> imeTemp >> bodovi)//citanje imena i bodova
         {
             if (imeTemp == ime)
             {
@@ -264,18 +264,6 @@ bool ubaciZeton(int ploca[RED][STUPAC], char zeton, int stupac)
         }
     }
     return false; // ako je stupac pun vraca false
-}
-
-void ubaciPotez(int ploca[RED][STUPAC], char zeton, int stupac)
-{
-    for (int i = RED - 1; i >= 0; i--)
-    {
-        if (ploca[i][stupac] == 0)
-        {
-            ploca[i][stupac] = zeton;
-            break;
-        }
-    }
 }
 
 void spremiIgru()
