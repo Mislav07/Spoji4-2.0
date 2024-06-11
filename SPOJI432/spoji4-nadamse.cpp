@@ -296,16 +296,13 @@ void ucitajIgru()
     cout << "Igra je ucitana! " << endl;
 }
 
-void igra(bool ucitaj_ime = true)
+void igra()
 {
     int brojPokretanja = procitajBrojPokretanja();
     brojPokretanja++;
     BrojPokretaBrojac(brojPokretanja);
 
     string igrac1, igrac2;
-
-    if(ucitaj_ime)
-    {
     cout << "Unesite ime prvog igraca: " << endl;
     cin >> igrac1;
     cout << "Unesite ime drugog igraca: " << endl;
@@ -313,7 +310,6 @@ void igra(bool ucitaj_ime = true)
 
     ulogirajIgraca(igrac1);
     ulogirajIgraca(igrac2);
-    }
 
     while (true)
     {
@@ -403,7 +399,7 @@ int main()
         if (izbor == 1)
         {
             cout << "Zapoceli ste igru!" << endl;
-            label:
+        label:
             igra();
         }
 
@@ -428,8 +424,7 @@ int main()
             ocistiTerminal();
             ucitajIgru();
             printanje_ploce();
-            igra(false);
-            //goto label;
+            goto label;
         }
         else if (izbor == 6)
         {
