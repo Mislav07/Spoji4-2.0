@@ -7,24 +7,18 @@
 
 using namespace std;
 
-
 const int RED = 6;
 const int STUPAC = 7;
 int ploca[RED][STUPAC];
 
-void ocistiTerminal() //link stackoverflow
+void ocistiTerminal() // link stackoverflow
 {
     cout << "\033[2J\033[1;1H";
 }
 
-bool imePostoji(const vector<string> &imena, const string &ime) // chatgpt
-{
-    return find(imena.begin(), imena.end(), ime) != imena.end();
-}
-
 void BrojPokretaBrojac(int brojPokretanja)
 {
-    ofstream datoteka("C:\\Users\\Gb-gama\\Documents\\GitHub\\Spoji4-2.0\\SPOJI432\\broj_pokretanja.bin", ios::binary);
+    ofstream datoteka("broj_pokretanja.bin", ios::binary);
     if (datoteka.is_open())
     {
         datoteka.write(reinterpret_cast<char *>(&brojPokretanja), sizeof(brojPokretanja));
@@ -38,7 +32,7 @@ void BrojPokretaBrojac(int brojPokretanja)
 
 int procitajBrojPokretanja()
 {
-    ifstream datoteka("C:\\Users\\Gb-gama\\Documents\\GitHub\\Spoji4-2.0\\SPOJI432\\broj_pokretanja.bin", ios::binary);
+    ifstream datoteka("broj_pokretanja.bin", ios::binary);
     int brojPokretanja = 0;
     if (datoteka.is_open())
     {
@@ -52,67 +46,51 @@ int procitajBrojPokretanja()
     return brojPokretanja;
 }
 
-void upisImena(string &igrac1, string &igrac2)
+bool ulogirajIgraca(string &ime)
 {
     fstream datoteka;
-    datoteka.open("C:\\Users\\Gb-gama\\Documents\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt", ios::in);
+    datoteka.open("C:\\Users\\Mislav\\OneDrive\\Dokumenti\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt", ios::in);
     vector<string> imena;
-    string ime;
+    string imeTemp;
     int bodovi;
+    bool found = false;
 
     if (datoteka.is_open())
     {
-        while (datoteka >> ime >> bodovi)
+        while (datoteka >> imeTemp >> bodovi)
         {
-            imena.push_back(ime);
+            imena.push_back(imeTemp);
+            if (imeTemp == ime)
+            {
+                found = true;
+            }
         }
         datoteka.close();
     }
     else
     {
-        cout << "Datoteka se ne moze otvoriti! " << endl;
+        cout << "Datoteka se ne moze otvoriti!" << endl;
     }
 
-    // provjera imena prvog igraca
-    while (true)
+    if (!found)
     {
-        cout << "Unesite ime 1. igraca: " << endl;
-        getline(cin, igrac1);
-        if (!imePostoji(imena, igrac1))
+        datoteka.open("C:\\Users\\Mislav\\OneDrive\\Dokumenti\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt", ios::app);
+        if (datoteka.is_open())
         {
-            break;
+            datoteka << ime << " 0" << endl;
+            datoteka.close();
         }
-        cout << "Ovo ime vec postoji. Molim unesite drugo ili ga malo promijenite! " << endl;
-    }
-
-    // drugi igrac
-    while (true)
-    {
-        cout << "Unesite ime 2. igraca: " << endl;
-        getline(cin, igrac2);
-        if (!imePostoji(imena, igrac2))
+        else
         {
-            break;
+            cout << "Datoteka se ne moze otvoriti!" << endl;
         }
-        cout << "Ovo ime vec postoji. Molim unesite drugo ili ga malo promijenite! " << endl;
     }
-
-    datoteka.open("C:\\Users\\Gb-gama\\Documents\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt", ios::app);
-    if (datoteka.is_open())
-    {
-        datoteka << igrac1 << " 0" << endl;
-        datoteka << igrac2 << " 0" << endl;
-        datoteka.close();
-    }
-    else
-    {
-        cout << "Datoteka se ne moze otvoriti! " << endl;
-    }
+    return found;
 }
 
 void ispisIgraca()
 {
-    fstream datoteka("C:\\Users\\Gb-gama\\Documents\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt");
+    fstream datoteka("C:\\Users\\Mislav\\OneDrive\\Dokumenti\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt");
     string ime;
     int bodovi;
 
@@ -133,7 +111,7 @@ void ispisIgraca()
 
 void updateScore(const string &ime) // chatgpt
 {
-    fstream datoteka("C:\\Users\\Gb-gama\\Documents\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt");
+    fstream datoteka("C:\\Users\\Mislav\\OneDrive\\Dokumenti\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt");
     vector<pair<string, int>> igraci;
     string imeTemp;
     int bodovi;
@@ -155,7 +133,7 @@ void updateScore(const string &ime) // chatgpt
         cout << "Datoteka se ne moze otvoriti! " << endl;
     }
 
-    datoteka.open("C:\\Users\\Gb-gama\\Documents\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt", ios::out | ios::trunc);
+    datoteka.open("C:\\Users\\Mislav\\OneDrive\\Dokumenti\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt", ios::out | ios::trunc);
     if (datoteka.is_open())
     {
         for (const auto &igrac : igraci)
@@ -290,14 +268,52 @@ bool ubaciZeton(int ploca[RED][STUPAC], char zeton, int stupac)
     return false; // ako je stupac pun vraca false
 }
 
-void igra()
+void ubaciPotez(int ploca[RED][STUPAC], char zeton, int stupac)
+{
+    for (int i = RED - 1; i >= 0; i--)
+    {
+        if (ploca[i][stupac] == 0)
+        {
+            ploca[i][stupac] = zeton;
+            break;
+        }
+    }
+}
+
+void spremiIgru()
+{
+    fstream datoteka("saveIgrice.bin", ios::binary | ios::out);
+    datoteka.write(reinterpret_cast<char *>(ploca), sizeof(ploca));
+    datoteka.close();
+    cout << "Igra je spremljena! " << endl;
+}
+
+void ucitajIgru()
+{
+    fstream datoteka("saveIgrice.bin", ios::binary | ios::in);
+    datoteka.read(reinterpret_cast<char *>(ploca), sizeof(ploca));
+    datoteka.close();
+    cout << "Igra je ucitana! " << endl;
+}
+
+void igra(bool ucitaj_ime = true)
 {
     int brojPokretanja = procitajBrojPokretanja();
     brojPokretanja++;
     BrojPokretaBrojac(brojPokretanja);
 
     string igrac1, igrac2;
-    upisImena(igrac1, igrac2);
+
+    if(ucitaj_ime)
+    {
+    cout << "Unesite ime prvog igraca: " << endl;
+    cin >> igrac1;
+    cout << "Unesite ime drugog igraca: " << endl;
+    cin >> igrac2;
+
+    ulogirajIgraca(igrac1);
+    ulogirajIgraca(igrac2);
+    }
 
     while (true)
     {
@@ -314,7 +330,6 @@ void igra()
 
         while (true)
         {
-            // clearScreen();
             ocistiTerminal();
             printanje_ploce();
 
@@ -326,7 +341,6 @@ void igra()
 
             if (provjera_Pobjednik(ploca, zeton))
             {
-                // clearScreen();
                 ocistiTerminal();
                 printanje_ploce();
                 cout << (trenutniIgrac == 1 ? igrac1 : igrac2) << " je pobjedio! Osvojili ste 1 bod!" << endl;
@@ -335,13 +349,21 @@ void igra()
             }
             if (provjera_PunaPloca(ploca))
             {
-                // clearScreen();
                 ocistiTerminal();
                 printanje_ploce();
                 cout << "Ploca je popunjena! Nerjeseno!! " << endl;
                 break;
             }
             trenutniIgrac = (trenutniIgrac == 1) ? 2 : 1;
+
+            string odgovor;
+            cout << "Zelite li spremiti igru (da/ne)? " << endl;
+            cin >> odgovor;
+            if (odgovor == "da" || odgovor == "Da" || odgovor == "DA")
+            {
+                spremiIgru();
+                break;
+            }
         }
 
         string odgovor;
@@ -350,7 +372,6 @@ void igra()
         cin.ignore();
         if (odgovor != "da" && odgovor != "Da" && odgovor != "DA")
         {
-            // igra();
             ocistiTerminal();
             break;
         }
@@ -373,13 +394,16 @@ int main()
         cout << "1. Zapocnite igru: igrac protiv igraca! " << endl;
         cout << "2. Ispis pobjeda po igracima. " << endl;
         cout << "3. Ispis broja pokretanja igre. " << endl;
-        cout << "4. Izadite iz igrice! " << endl;
+        cout << "4. Spremite igricu! " << endl;
+        cout << "5. Ucitajte igricu! " << endl;
+        cout << "6. Izadite iz igrice! " << endl;
         cin >> izbor;
         cin.ignore();
 
         if (izbor == 1)
         {
             cout << "Zapoceli ste igru!" << endl;
+            label:
             igra();
         }
 
@@ -396,13 +420,24 @@ int main()
         }
         else if (izbor == 4)
         {
+            ocistiTerminal();
+            spremiIgru();
+        }
+        else if (izbor == 5)
+        {
+            ocistiTerminal();
+            ucitajIgru();
+            printanje_ploce();
+            igra(false);
+            //goto label;
+        }
+        else if (izbor == 6)
+        {
             cout << "Odabrali ste izlazak iz igrice! Doviđenja! " << endl;
             break;
         }
         else
-        {
             cout << "Odabrali ste izbor koji ne postoji! Molim unesite validan izbor! " << endl;
-        }
     }
     return 0;
 }
