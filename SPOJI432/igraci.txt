@@ -4,7 +4,7 @@ Andrija 1
 Vid 0
 Toni 0
 Serdar 0
-mislav 0
+mislav 1
 mario 0
 Marko 0
 Joza 1

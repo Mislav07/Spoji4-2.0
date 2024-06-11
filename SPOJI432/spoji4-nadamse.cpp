@@ -1,9 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <cstdlib>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
@@ -18,7 +16,7 @@ void ocistiTerminal() // link stackoverflow
 
 void BrojPokretaBrojac(int brojPokretanja)
 {
-    ofstream datoteka("broj_pokretanja.bin", ios::binary);
+    ofstream datoteka("broj_pokretanja.bin", ios::binary);//upisivanje u datoteku
     if (datoteka.is_open())
     {
         datoteka.write(reinterpret_cast<char *>(&brojPokretanja), sizeof(brojPokretanja));
@@ -32,7 +30,7 @@ void BrojPokretaBrojac(int brojPokretanja)
 
 int procitajBrojPokretanja()
 {
-    ifstream datoteka("broj_pokretanja.bin", ios::binary);
+    ifstream datoteka("broj_pokretanja.bin", ios::binary);//citanje iz datoteke
     int brojPokretanja = 0;
     if (datoteka.is_open())
     {
@@ -51,9 +49,9 @@ bool ulogirajIgraca(string &ime)
     fstream datoteka;
     datoteka.open("C:\\Users\\Mislav\\OneDrive\\Dokumenti\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt", ios::in);
     vector<string> imena;
-    string imeTemp;
+    string imeTemp; //privremena varijabla za citanje imena iz datoteke
     int bodovi;
-    bool found = false;
+    bool found = false; //jeli ime pronadeno u datoteci
 
     if (datoteka.is_open())
     {
@@ -72,7 +70,7 @@ bool ulogirajIgraca(string &ime)
         cout << "Datoteka se ne moze otvoriti!" << endl;
     }
 
-    if (!found)
+    if (!found) //ako ime nije pronadeno dodaje se ime i 0 bodova
     {
         datoteka.open("C:\\Users\\Mislav\\OneDrive\\Dokumenti\\GitHub\\Spoji4-2.0\\SPOJI432\\igraci.txt", ios::app);
         if (datoteka.is_open())
@@ -99,7 +97,7 @@ void ispisIgraca()
         cout << "Imena igraca koji su igrali Spoji4 2.0: " << endl;
         while (datoteka >> ime >> bodovi)
         {
-            cout << "Ime igraca: " << ime << " bodovi igraca: " << bodovi << endl;
+            cout << "Ime igraca: \t" << ime << "\t bodovi igraca: \t" << bodovi << endl;
         }
         datoteka.close();
     }
