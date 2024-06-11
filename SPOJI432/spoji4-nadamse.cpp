@@ -390,16 +390,14 @@ int main()
         cout << "1. Zapocnite igru: igrac protiv igraca! " << endl;
         cout << "2. Ispis pobjeda po igracima. " << endl;
         cout << "3. Ispis broja pokretanja igre. " << endl;
-        cout << "4. Spremite igricu! " << endl;
-        cout << "5. Ucitajte igricu! " << endl;
-        cout << "6. Izadite iz igrice! " << endl;
+        cout << "4. Ucitajte igricu! " << endl;
+        cout << "5. Izadite iz igrice! " << endl;
         cin >> izbor;
         cin.ignore();
 
         if (izbor == 1)
         {
             cout << "Zapoceli ste igru!" << endl;
-        label:
             igra();
         }
 
@@ -417,16 +415,10 @@ int main()
         else if (izbor == 4)
         {
             ocistiTerminal();
-            spremiIgru();
-        }
-        else if (izbor == 5)
-        {
-            ocistiTerminal();
             ucitajIgru();
             printanje_ploce();
-            goto label;
         }
-        else if (izbor == 6)
+        else if (izbor == 5)
         {
             cout << "Odabrali ste izlazak iz igrice! Doviđenja! " << endl;
             break;

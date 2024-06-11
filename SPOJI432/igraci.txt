@@ -1,4 +1,4 @@
-Mislav 9
+Mislav 10
 Mario 1
 Andrija 1
 Vid 0
@@ -9,3 +9,5 @@ mario 0
 Marko 0
 Joza 1
 Dean 1
+Smolec 2
+Lukas 0
